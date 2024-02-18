@@ -1,7 +1,7 @@
 const My_Pet = document.createElement('div');
 My_Pet.innerHTML = "Pet.png"
-My_Pet.style.width = 50;
-My_Pet.style.height = 50;
+My_Pet.style.width = "100px";
+My_Pet.style.height = "100px";
 My_Pet.style.backgroundColor = "Blue";
 My_Pet.style.position = 'fixed';
 My_Pet.style.top = '50%';
@@ -49,3 +49,12 @@ styleSheet.insertRule(`
     }
   }
 `, styleSheet.cssRules.length);
+
+My_Pet.addEventListener("click", Pet);
+function Pet(){
+  console.log("clicked");
+  let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+  My_Pet.style.backgroundColor = randomColor;
+  console.log("changed colour")
+  setTimeout(1000);
+}
