@@ -23,21 +23,12 @@ function My_Pet_Move() {
 
   My_Pet.style.transition = 'transform 5s linear';
   My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
-
-  // Reset the transition and trigger the next movement after 5 seconds
-  setTimeout(() => {
-      My_Pet.style.transition = 'none';
-      My_Pet_Move();
-  }, 2000); //doesnt even work
 }
 
-My_Pet_Move();
+setInterval(My_Pet_Move, 2000);
 
 My_Pet.addEventListener("click", Pet);
 function Pet(){
-  console.log("clicked");
   let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
   My_Pet.style.backgroundColor = randomColor;
-  console.log("changed colour")
-  setTimeout(1000);
 }
