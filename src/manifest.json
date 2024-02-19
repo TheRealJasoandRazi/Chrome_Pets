@@ -12,14 +12,13 @@
           "js": ["Pet.js"]
         }
       ],
-    "background": [
-        {
-        "scripts": ["background.js"]
-        }
-      ],
+    "background": {
+      "service_worker": "background.js"
+    },
     "permissions": [
       "activeTab",
       "tabs",
-      "storage"
+      "storage",
+      "windows"
     ]
   }
