@@ -16,15 +16,11 @@ chrome.runtime.onMessage.addListener(CreatePet);
 function CreatePet(message){
   console.log(message);
 }*/
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-    if (request.greeting === "hello")
-      sendResponse({farewell: "goodbye"});
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.message === "myMessage") {
+    console.log("recieved message");
   }
-); // this reciever can't be found by the sender in background.js
+});
 
 function My_Pet_Move() {
   const randomAngle = Math.random() * 360;

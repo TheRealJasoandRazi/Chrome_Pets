@@ -10,10 +10,9 @@ const default_pet_position = {
     y: 100
 }
 
+function send_position() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { message: "myMessage" });
+    });
+  }
 chrome.tabs.onActivated.addListener(send_position);
-
-async function send_position(){
-    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    const response = await chrome.tabs.sendMessage(tab.id, {greeting: "hello"});
-    console.log(response);
-} 
