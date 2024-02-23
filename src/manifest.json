@@ -15,11 +15,13 @@
     "background": {
       "service_worker": "background.js"
     },
+    "host_permissions": ["*://*/*"],
     "permissions": [
       "activeTab",
       "tabs",
       "storage",
       "windows",
-      "webNavigation"
+      "webNavigation",
+      "scripting"
     ]
   }

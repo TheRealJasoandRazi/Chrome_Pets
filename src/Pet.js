@@ -42,16 +42,9 @@ function My_Pet_Move() {
   const translateY = distance * Math.sin(angleInRadians);
 
   //update position of pet, this doesn't move the pet but is used when it returns its position
-  newTop = (parseFloat(My_Pet.style.top) + translateY) + "px";
-  newLeft = (parseFloat(My_Pet.style.left) + translateX) + "px";
+  My_Pet.style.top = (parseFloat(My_Pet.style.top) + translateY) + "px";
+  My_Pet.style.left = (parseFloat(My_Pet.style.left) + translateX) + "px";
   
-  const windowHeight = window.innerHeight;
-  const windowWidth = window.innerWidth;
-
-  //makes sure the pet can't move outside of the window screen
-  My_Pet.style.top = Math.max(0, Math.min(newTop, windowHeight - My_Pet.style.height)) + "px";
-  My_Pet.style.left = Math.max(0, Math.min(newLeft, windowWidth - My_Pet.style.width)) + "px";
-
   requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
     My_Pet.style.transition = '5s';
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
