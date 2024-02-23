@@ -14,11 +14,10 @@ function New_Pet() {
 chrome.tabs.onActivated.addListener(New_Pet); //sends data to active tab
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    const newPetData = { Pet_Data_X: message.Pet_Data_X, Pet_Data_Y: message.Pet_Data_Y };
-    chrome.storage.local.set({ Pet_Data: newPetData }, function() {
+    chrome.storage.local.set({ Pet_Data: message }, function() {
         console.log("Pet_Data is set:");
-        console.log(newPetData.Pet_Data_X);
-        console.log(newPetData.Pet_Data_Y);
+        console.log(message.Pet_Data_X); //no output
+        console.log(message.Pet_Data_Y);
     });
 });
 

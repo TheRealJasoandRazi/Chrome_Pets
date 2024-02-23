@@ -8,7 +8,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     Create_Pet(message.Pet_Data_Y, message.Pet_Data_X);
   } else if(message.message === "Delete_Pet"){
     console.log("Deleting pet");
-    My_Pet.remove();
+    if (My_Pet){
+      My_Pet.remove();
+    }
   }
 });
 
@@ -55,10 +57,12 @@ function My_Pet_Move() {
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
 
-  chrome.runtime.sendMessage({
+  let newPetData = {
     Pet_Data_X: My_Pet.style.left,
     Pet_Data_Y: My_Pet.style.top
-  });
+  };
+
+  chrome.runtime.sendMessage(newPetData);
 }
 
 function Time_Out() { //creates a delay before moving the pet again
