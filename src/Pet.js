@@ -1,21 +1,14 @@
 let My_Pet;
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.message === "return_position") {
-    if (My_Pet && My_Pet.style && My_Pet.style.left !== null) {
-      chrome.runtime.sendMessage({
-        Pet_Data_X: My_Pet.style.left,
-        Pet_Data_Y: My_Pet.style.top
-      })
-      My_Pet.remove();
-    } else {
-      chrome.runtime.sendMessage({
-        Pet_Data_X: window.innerWidth / 2 + "px",
-        Pet_Data_Y: window.innerHeight / 2 + "px"
-      })
-    }
-  } else if (message.message === "New_Pet") {
-      Create_Pet(message.Pet_Data_Y, message.Pet_Data_X);
+  if (message.message === "New_Pet") {
+    console.log("Creating pet");
+    console.log(message.Pet_Data_Y);
+    console.log(message.Pet_Data_X);
+    Create_Pet(message.Pet_Data_Y, message.Pet_Data_X);
+  } else if(message.message === "Delete_Pet"){
+    console.log("Deleting pet");
+    My_Pet.remove();
   }
 });
 
@@ -62,6 +55,10 @@ function My_Pet_Move() {
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
 
+  chrome.runtime.sendMessage({
+    Pet_Data_X: My_Pet.style.left,
+    Pet_Data_Y: My_Pet.style.top
+  });
 }
 
 function Time_Out() { //creates a delay before moving the pet again
