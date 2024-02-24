@@ -1,7 +1,11 @@
 function New_Pet() {
-    chrome.tabs.query({ active: false, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { message: "Delete_Pet" });
-    }); //delete all pets in all tabs
+    chrome.tabs.query({}, function (tabs) {
+        tabs.forEach(function (tab) {
+            if (!tab.active) {
+                chrome.tabs.sendMessage(tab.id, { message: "Delete_Pet" });
+            }
+        });
+    });
 
     chrome.storage.local.get(["Pet_Data"], function(result) {
         chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
@@ -18,10 +22,7 @@ chrome.tabs.onActivated.addListener(New_Pet); //sends data to active tab
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     chrome.storage.local.set({ Pet_Data: message });
-    chrome.storage.local.get(["Pet_Data"], function(result) {
-        console.log(result);
-    });
-    //TEST
+    console.log(message);
 });
 
 chrome.runtime.onInstalled.addListener(function(details) {
