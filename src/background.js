@@ -50,3 +50,27 @@ chrome.runtime.onInstalled.addListener(function(details) {
     });
 });
 
+chrome.tabs.onCreated.addListener(function (tab) {
+    console.log('New tab created. Tab ID:', tab.id);
+    chrome.scripting.executeScript(
+        {
+            target : {tabId : tab.id },
+            files : [ "Pet.js" ],
+        }).then(() => console.log("script injected in new tab"));
+});
+
+/*
+chrome.webNavigation.onCompleted.addListener(function(details) {
+    // Check if the navigation is in the main frame
+    if (details.frameId === 0) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.scripting.executeScript(
+            {
+                target : {tabId : tabs[0].id },
+                files : [ "Pet.js" ],
+            }).then(() => console.log("script injected in new page"));
+      });
+    }
+});*/
+  
+

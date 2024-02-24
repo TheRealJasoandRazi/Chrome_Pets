@@ -3,8 +3,6 @@ let My_Pet;
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
     console.log("Creating pet");
-    console.log(message.Pet_Data_Y);
-    console.log(message.Pet_Data_X);
     Create_Pet(message.Pet_Data_Y, message.Pet_Data_X);
   } else if(message.message === "Delete_Pet"){
     console.log("Deleting pet");
@@ -15,18 +13,18 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 function Create_Pet(top, left){
-  const newPet = document.createElement('div');
-  newPet.innerHTML = "Pet.png";
-  newPet.style.width = "100px";
-  newPet.style.height = "100px";
-  newPet.style.backgroundColor = "Blue";
-  newPet.style.position = 'fixed';
-  newPet.style.top = top;
-  newPet.style.left = left;
+  console.log(top);
+  console.log(left);
+  My_Pet = document.createElement('div');
+  My_Pet.innerHTML = "Pet.png";
+  My_Pet.style.width = "100px";
+  My_Pet.style.height = "100px";
+  My_Pet.style.backgroundColor = "Blue";
+  My_Pet.style.position = 'fixed';
+  My_Pet.style.top = top;
+  My_Pet.style.left = left;
 
-  document.body.appendChild(newPet);
-
-  My_Pet = newPet;
+  document.body.appendChild(My_Pet);
 
   My_Pet.addEventListener("click", Pet);
   My_Pet.addEventListener('transitionend', Time_Out);
@@ -47,6 +45,12 @@ function Get_Direction(){
 }
 
 function My_Pet_Move() {
+  let My_PetData = {
+    Pet_Data_X: My_Pet.style.left,
+    Pet_Data_Y: My_Pet.style.top
+  };
+  chrome.runtime.sendMessage(My_PetData);
+
   let top, left, translateX, translateY;
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
@@ -72,13 +76,6 @@ function My_Pet_Move() {
     My_Pet.style.transition = '10s';
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
-
-  let newPetData = {
-    Pet_Data_X: My_Pet.style.left,
-    Pet_Data_Y: My_Pet.style.top
-  };
-
-  chrome.runtime.sendMessage(newPetData);
 }
 
 function Time_Out() { //creates a delay before moving the pet again
