@@ -34,7 +34,7 @@ function Create_Pet(top, left){
   My_Pet_Move();
 }
 
-function My_Pet_Move() {
+function Get_Direction(){
   const randomAngle = Math.random() * 360;
   const distance = Math.random() * (400 - 100) + 100;
   const angleInRadians = (randomAngle * Math.PI) / 180;
@@ -43,11 +43,33 @@ function My_Pet_Move() {
 
   const top = parseFloat(My_Pet.style.top) + translateY;
   const left = parseFloat(My_Pet.style.left) + translateX;
+  return [top, left, translateX, translateY];
+}
+
+function My_Pet_Move() {
+  let top, left, translateX, translateY;
+  const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+
+  do {
+    [top, left, translateX, translateY] = Get_Direction();
+    if (
+      top > 0 &&
+      top < windowHeight &&
+      left > 0 &&
+      left < windowWidth
+    ) {
+      console.log('Position is within bounds. Breaking loop.');
+      break;
+    }
+    console.log('Position is out of bounds. Continuing loop.');
+  } while (true);
+
   My_Pet.style.top = top + "px";
   My_Pet.style.left = left + "px";
 
   requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
-    My_Pet.style.transition = '5s';
+    My_Pet.style.transition = '10s';
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
 
