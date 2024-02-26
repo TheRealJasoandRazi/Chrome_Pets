@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log("Deleting pet");
     if (My_Pet) {
         My_Pet.remove();
-        sendResponse({ success: true });
+        sendResponse({ success: true }); //for the callback function in bg.js
     } else {
         sendResponse({ success: false });
     }
@@ -32,7 +32,14 @@ function Create_Pet(){
   My_Pet.addEventListener("click", Pet);
   My_Pet.addEventListener('transitionend', Time_Out);
 
-  My_Pet_Move();
+  //slide in animation
+  /*
+  requestAnimationFrame(() => {
+    My_Pet.style.transition = '10s';
+    My_Pet.style.transform = `translate(200px, 0px)`;
+    My_Pet.style.left = 100;
+    console.log("end of create_Pet");
+  });*/ //THIS CODE CRASHES YOUR WEB BROWSER
 }
 
 function Get_Direction(){
@@ -71,6 +78,7 @@ function My_Pet_Move() {
 
   requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
     My_Pet.style.transition = '10s';
+    console.log(translateX, translateY);
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
     console.log("moving pet");
   });
