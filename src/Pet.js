@@ -3,26 +3,29 @@ let My_Pet;
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
     console.log("Creating pet");
-    Create_Pet(message.Pet_Data_Y, message.Pet_Data_X);
-  } else if(message.message === "Delete_Pet"){
+    Create_Pet();
+  } else  if (message.message === "Delete_Pet") {
     console.log("Deleting pet");
-    if (My_Pet){
-      My_Pet.remove();
+    if (My_Pet) {
+        My_Pet.remove();
+        sendResponse({ success: true });
+    } else {
+        sendResponse({ success: false });
     }
   }
 });
 
-function Create_Pet(top, left){
-  console.log(top);
-  console.log(left);
+function Create_Pet(){
   My_Pet = document.createElement('div');
+  My_Pet.setAttribute('id', 'pet');
+  My_Pet.style.zIndex = '9999';
   My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = "100px";
   My_Pet.style.height = "100px";
   My_Pet.style.backgroundColor = "Blue";
   My_Pet.style.position = 'fixed';
-  My_Pet.style.top = top;
-  My_Pet.style.left = left;
+  My_Pet.style.top = 0;
+  My_Pet.style.left = 0;
 
   document.body.appendChild(My_Pet);
 
@@ -45,12 +48,6 @@ function Get_Direction(){
 }
 
 function My_Pet_Move() {
-  let My_PetData = {
-    Pet_Data_X: My_Pet.style.left,
-    Pet_Data_Y: My_Pet.style.top
-  };
-  chrome.runtime.sendMessage(My_PetData);
-
   let top, left, translateX, translateY;
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
@@ -69,12 +66,13 @@ function My_Pet_Move() {
     console.log('Position is out of bounds. Continuing loop.');
   } while (true);
 
-  My_Pet.style.top = top + "px";
-  My_Pet.style.left = left + "px";
+  My_Pet.style.top = top;
+  My_Pet.style.left = left;
 
   requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
     My_Pet.style.transition = '10s';
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    console.log("moving pet");
   });
 }
 
