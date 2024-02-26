@@ -32,6 +32,7 @@ function Create_Pet(){
   My_Pet.addEventListener("click", Pet);
   My_Pet.addEventListener('transitionend', Time_Out);
 
+  My_Pet_Move();
   //slide in animation
   /*
   requestAnimationFrame(() => {
