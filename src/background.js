@@ -27,7 +27,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
         }
     }
 });
-
+//communicates with popup.html
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.message === "Create_Pet") {
         console.log("Message received in background:", message.message);
@@ -59,3 +59,11 @@ chrome.tabs.onActivated.addListener(function (details) {
         });
     }); 
 });*/
+
+ /*"content_scripts": [ //can't be put in json file
+        {
+          "matches": ["<all_urls>"],
+          "js": ["Pet.js"]
+        }
+      ],
+    */

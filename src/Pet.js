@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 function Create_Pet(){
   My_Pet = document.createElement('div');
-  My_Pet.setAttribute('id', 'pet');
+  //My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
   My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = "100px";
@@ -26,6 +26,7 @@ function Create_Pet(){
   My_Pet.style.position = 'fixed';
   My_Pet.style.top = 0;
   My_Pet.style.left = 0;
+  My_Pet.style.transition = '10s';
 
   document.body.appendChild(My_Pet);
 
@@ -78,7 +79,6 @@ function My_Pet_Move() {
   My_Pet.style.left = left;
 
   requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
-    My_Pet.style.transition = '10s';
     console.log(translateX, translateY);
     My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
     console.log("moving pet");

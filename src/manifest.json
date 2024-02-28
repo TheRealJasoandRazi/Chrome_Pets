@@ -6,12 +6,6 @@
     "action": {
       "default_popup": "Home_PopUp.html"
     },
-    "content_scripts": [
-        {
-          "matches": ["<all_urls>"],
-          "js": ["Pet.js"]
-        }
-      ],
     "background": {
       "service_worker": "background.js"
     },
