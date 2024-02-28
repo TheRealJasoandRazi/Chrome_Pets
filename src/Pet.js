@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 function Create_Pet(){
   My_Pet = document.createElement('div');
-  //My_Pet.setAttribute('id', 'pet');
+  My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
   My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = "100px";
@@ -26,25 +26,16 @@ function Create_Pet(){
   My_Pet.style.position = 'fixed';
   My_Pet.style.top = 0;
   My_Pet.style.left = 0;
-  My_Pet.style.transition = '10s';
+  //My_Pet.style.transition = '10s';
 
   document.body.appendChild(My_Pet);
 
   My_Pet.addEventListener("click", Pet);
-  My_Pet.addEventListener('transitionend', Time_Out);
 
   My_Pet_Move();
-  //slide in animation
-  /*
-  requestAnimationFrame(() => {
-    My_Pet.style.transition = '10s';
-    My_Pet.style.transform = `translate(200px, 0px)`;
-    My_Pet.style.left = 100;
-    console.log("end of create_Pet");
-  });*/ //THIS CODE CRASHES YOUR WEB BROWSER
 }
 
-function Get_Direction(){
+function Get_Direction(){ 
   const randomAngle = Math.random() * 360;
   const distance = Math.random() * (400 - 100) + 100;
   const angleInRadians = (randomAngle * Math.PI) / 180;
@@ -53,11 +44,12 @@ function Get_Direction(){
 
   const top = parseFloat(My_Pet.style.top) + translateY;
   const left = parseFloat(My_Pet.style.left) + translateX;
-  return [top, left, translateX, translateY];
+  return [top, left];
 }
 
+let animationStartTime;
 function My_Pet_Move() {
-  let top, left, translateX, translateY;
+  let top, left;
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
 
@@ -75,18 +67,39 @@ function My_Pet_Move() {
     console.log('Position is out of bounds. Continuing loop.');
   } while (true);
 
-  My_Pet.style.top = top;
-  My_Pet.style.left = left;
+  const initialTop = parseFloat(My_Pet.style.top) || 0;
+  const initialLeft = parseFloat(My_Pet.style.left) || 0;
 
-  requestAnimationFrame(() => { //this code waits for the next available frame and moves the div
-    console.log(translateX, translateY);
-    My_Pet.style.transform = `translate(${translateX}px, ${translateY}px)`;
-    console.log("moving pet");
-  });
-}
+  //start time of animation
+  animationStartTime = performance.now(); //highly precise time in milliseconds
 
-function Time_Out() { //creates a delay before moving the pet again
-  setTimeout(My_Pet_Move, 2000);
+  function animate(timestamp) { //timestamp is passed in by the browser, only happens when called by the requestAnimationFrame
+    //gets the current progress of the animation
+    const progress = (timestamp - animationStartTime) / 10000; // 2000 milliseconds for the animation
+
+    //1 indicates the end of an animation, this checks that the pet should still be moving
+    if (progress < 1) {
+      const currentTop = initialTop + progress * (top - initialTop);
+      const currentLeft = initialLeft + progress * (left - initialLeft);
+
+      //updates the position of the pet
+      My_Pet.style.top = currentTop + 'px';
+      My_Pet.style.left = currentLeft + 'px';
+
+      requestAnimationFrame(animate); //creates a recursion call
+    } else { //set the final position
+      // Ensure the final position is set
+      My_Pet.style.top = top + 'px';
+      My_Pet.style.left = left + 'px';
+
+      // stop the bet for a hard coded amount of time
+      setTimeout(() => {
+        My_Pet_Move();
+      }, 2000);
+    }
+  }
+
+  requestAnimationFrame(animate);
 }
 
 function Pet() { //the pet action

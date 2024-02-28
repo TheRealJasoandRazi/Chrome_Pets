@@ -18,6 +18,7 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
 });
 
 //onBeforeNavigate -> onCommitted -> [onDOMContentLoaded] -> onCompleted
+
 chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
     if (details.frameId === 0) {
         if(Create_Pet_Button_Clicked){
@@ -27,6 +28,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
         }
     }
 });
+
 //communicates with popup.html
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.message === "Create_Pet") {
