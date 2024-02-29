@@ -1,5 +1,6 @@
 let Create_Pet_Button_Clicked = false;
 
+
 chrome.webNavigation.onCompleted.addListener(function (details) {
     if (details.frameId === 0) {
         if(Create_Pet_Button_Clicked){
@@ -51,7 +52,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 //on tab activated, delete all pets in inactive tabs
 //causes issue == only creates new pet when page is loaded
-/*
 chrome.tabs.onActivated.addListener(function (details) {
     if (Create_Pet_Button_Clicked)
     {
@@ -61,17 +61,17 @@ chrome.tabs.onActivated.addListener(function (details) {
                     chrome.tabs.sendMessage(element.id, { message: "Delete_Pet" }, function(response) {
                         console.log("Deleting pet response in old tab:", response);
                     });
+                } else {
+                    chrome.scripting.executeScript(
+                        {
+                            target: { tabId: element.id },
+                            files: ["Pet.js"],
+                        }).then(() => { //makes sure to run New_Pet after injection is done
+                            console.log("script injected in new page");
+                            chrome.tabs.sendMessage(element.id, { message: "New_Pet" });
+                    });
                 }
             });
         }); 
     }
-});*/
-
-//can't be put in json file
- /*"content_scripts": [ 
-        {
-          "matches": ["<all_urls>"],
-          "js": ["Pet.js"]
-        }
-      ],
-    */
+});
