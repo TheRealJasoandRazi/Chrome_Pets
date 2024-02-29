@@ -15,6 +15,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   }
 });
 
+function easeOut(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 function Create_Pet(){
   My_Pet = document.createElement('div');
   My_Pet.setAttribute('id', 'pet');
@@ -32,7 +36,31 @@ function Create_Pet(){
 
   My_Pet.addEventListener("click", Pet);
 
-  My_Pet_Move();
+
+  function startani(){
+    let startTime;
+    let time_to_transition = 3000;
+
+    function animate(time) {
+      if (!startTime) {startTime = time;}
+
+      const progress = easeOut((time - startTime) / time_to_transition);
+      //console.log(progress);
+
+      // (progress * distant_to_move) - starting position, end position
+      My_Pet.style.left = `${Math.min((progress * 400) - 100, 300)}px`;
+      console.log(My_Pet.style.left);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else{
+        console.log("animation done");
+        My_Pet_Move();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  startani();
 }
 
 function Get_Direction(){ 
@@ -75,7 +103,7 @@ function My_Pet_Move() {
 
   function animate(timestamp) { //timestamp is passed in by the browser, only happens when called by the requestAnimationFrame
     //gets the current progress of the animation
-    const progress = (timestamp - animationStartTime) / 10000; // 2000 milliseconds for the animation
+    const progress = easeOut((timestamp - animationStartTime) / 10000); // 2000 milliseconds for the animation
 
     //1 indicates the end of an animation, this checks that the pet should still be moving
     if (progress < 1) {

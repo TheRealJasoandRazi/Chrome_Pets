@@ -18,12 +18,11 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
 });
 
 //onBeforeNavigate -> onCommitted -> [onDOMContentLoaded] -> onCompleted
-
 chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
     if (details.frameId === 0) {
         if(Create_Pet_Button_Clicked){
             chrome.tabs.sendMessage(details.tabId, { message: "Delete_Pet" }, function(response) {
-                console.log("Deleting pet response:", response);
+                console.log("Deleting pet response in old url:", response);
             });
         }
     }
@@ -51,18 +50,25 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 //on tab activated, delete all pets in inactive tabs
+//causes issue == only creates new pet when page is loaded
 /*
 chrome.tabs.onActivated.addListener(function (details) {
-    chrome.tabs.query({}, function (tabs) {
-        tabs.forEach(element => {
-            chrome.tabs.sendMessage(element.tabId, { message: "Delete_Pet" }, function(response) {
-                console.log("Deleting pet response:", response);
+    if (Create_Pet_Button_Clicked)
+    {
+        chrome.tabs.query({}, function (tabs) {
+            tabs.forEach(element => {
+                if (!element.active){
+                    chrome.tabs.sendMessage(element.id, { message: "Delete_Pet" }, function(response) {
+                        console.log("Deleting pet response in old tab:", response);
+                    });
+                }
             });
-        });
-    }); 
+        }); 
+    }
 });*/
 
- /*"content_scripts": [ //can't be put in json file
+//can't be put in json file
+ /*"content_scripts": [ 
         {
           "matches": ["<all_urls>"],
           "js": ["Pet.js"]
