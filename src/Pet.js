@@ -1,4 +1,6 @@
 let My_Pet;
+let Is_Petting = false;
+let Animation_Timer;
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
@@ -42,21 +44,24 @@ function Create_Pet(){
     let time_to_transition = 3000;
 
     function animate(time) {
-      if (!startTime) {startTime = time;}
+        if (!startTime) {startTime = time;}
 
-      const progress = easeOut((time - startTime) / time_to_transition);
-      //console.log(progress);
+        let progress = 0;
+        progress = easeOut((time - startTime) / time_to_transition);
+        //console.log(progress);
 
-      // (progress * distant_to_move) - starting position, end position
-      My_Pet.style.left = `${Math.min((progress * 400) - 100, 300)}px`;
-      console.log(My_Pet.style.left);
+        // (progress * distant_to_move) - starting position, end position
+        My_Pet.style.left = `${Math.min((progress * 400) - 100, 300)}px`;
+        console.log(My_Pet.style.left);
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else{
-        console.log("animation done");
-        My_Pet_Move();
-      }
+        if (progress < 1) {
+          if(!Is_Petting){
+            requestAnimationFrame(animate);
+          }
+        } else{
+          console.log("animation done");
+          My_Pet_Move();
+        }
     }
     requestAnimationFrame(animate);
   }
@@ -103,10 +108,9 @@ function My_Pet_Move() {
 
   function animate(timestamp) { //timestamp is passed in by the browser, only happens when called by the requestAnimationFrame
     //gets the current progress of the animation
-    const progress = easeOut((timestamp - animationStartTime) / 10000); // 2000 milliseconds for the animation
-
-    //1 indicates the end of an animation, this checks that the pet should still be moving
-    if (progress < 1) {
+    progress = easeOut((timestamp - animationStartTime) / 10000); // 2000 milliseconds for the animation
+    if (progress < 1) { //1 indicates the end of an animation, this checks that the pet should still be moving
+      console.log("progress is " + progress);
       const currentTop = initialTop + progress * (top - initialTop);
       const currentLeft = initialLeft + progress * (left - initialLeft);
 
@@ -114,7 +118,13 @@ function My_Pet_Move() {
       My_Pet.style.top = currentTop + 'px';
       My_Pet.style.left = currentLeft + 'px';
 
-      requestAnimationFrame(animate); //creates a recursion call
+      console.log(My_Pet.style.top, My_Pet.style.left);
+
+      //creates a recursion call
+      if(!Is_Petting){
+        requestAnimationFrame(animate); 
+      }
+
     } else { //set the final position
       // Ensure the final position is set
       My_Pet.style.top = top + 'px';
@@ -131,6 +141,11 @@ function My_Pet_Move() {
 }
 
 function Pet() { //the pet action
+  Is_Petting = true;
+  setTimeout(() => {
+    Is_Petting = false;
+    My_Pet_Move();
+  }, 1000);
   let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
   My_Pet.style.backgroundColor = randomColor;
 }
