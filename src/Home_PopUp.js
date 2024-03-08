@@ -6,5 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('Delete_Pet_Button').addEventListener('click', function () {
         chrome.runtime.sendMessage({ message: "Delete_Pet" });
         document.getElementById('Create_Pet_Button').innerHTML = 'Create Pet';
+        //updates the text on the create button
     });
 });

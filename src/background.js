@@ -1,6 +1,7 @@
 let Create_Pet_Button_Clicked = false;
+//keeps track if pet exists
 
-
+//runs whenever a url is loaded
 chrome.webNavigation.onCompleted.addListener(function (details) {
     if (details.frameId === 0) {
         if(Create_Pet_Button_Clicked){
@@ -59,8 +60,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
-//on tab activated, delete all pets in inactive tabs
-//causes issue == only creates new pet when page is loaded
+//on tab activated, delete all pets in inactive tabs and injects script into new tab
 chrome.tabs.onActivated.addListener(function (details) {
     if (Create_Pet_Button_Clicked)
     {
