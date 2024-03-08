@@ -2,6 +2,7 @@ let My_Pet;
 let Is_Petting = false;
 let Animation_Timer;
 
+//waits for message from background.js
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
     console.log("Creating pet");
@@ -12,16 +13,17 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         My_Pet.remove();
         sendResponse({ success: true }); //for the callback function in bg.js
     } else {
-        sendResponse({ success: false });
+        sendResponse({ success: false }); 
     }
   }
 });
 
 function easeOut(t) {
   return 1 - Math.pow(1 - t, 3);
-}
+} //whenn the input value t is low, it increases it and vice versa
+//this helps create an ease out transition effect
 
-function Create_Pet(){
+function Create_Pet(){ //properties of pet is hardcoded
   My_Pet = document.createElement('div');
   My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
@@ -39,7 +41,7 @@ function Create_Pet(){
   My_Pet.addEventListener("click", Pet);
 
 
-  function startani(){
+  function startani(){ //one time animation that runs when the pet is intiially created
     let startTime;
     let time_to_transition = 3000;
 
@@ -86,7 +88,7 @@ function My_Pet_Move() {
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
 
-  do {
+  do { //loops infinitely until it finds a location within the borders of the web browser to move to
     [top, left, translateX, translateY] = Get_Direction();
     if (
       top > 0 &&
@@ -141,10 +143,10 @@ function My_Pet_Move() {
 }
 
 function Pet() { //the pet action
-  Is_Petting = true;
+  Is_Petting = true; //stops the pet from moving
   setTimeout(() => {
     Is_Petting = false;
-    My_Pet_Move();
+    My_Pet_Move(); //starts the pet moving again
   }, 1000);
   let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
   My_Pet.style.backgroundColor = randomColor;
