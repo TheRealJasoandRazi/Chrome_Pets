@@ -54,7 +54,6 @@ function Create_Pet(){ //properties of pet is hardcoded
 
         // (progress * distant_to_move) - starting position, end position
         My_Pet.style.left = `${Math.min((progress * 400) - 100, 300)}px`;
-        console.log(My_Pet.style.left);
 
         if (progress < 1) {
           if(!Is_Petting){
@@ -96,10 +95,10 @@ function My_Pet_Move() {
       left > 0 &&
       left < windowWidth
     ) {
-      console.log('Position is within bounds. Breaking loop.');
+      //console.log('Position is within bounds. Breaking loop.');
       break;
     }
-    console.log('Position is out of bounds. Continuing loop.');
+    //console.log('Position is out of bounds. Continuing loop.');
   } while (true);
 
   const initialTop = parseFloat(My_Pet.style.top) || 0;
@@ -112,15 +111,12 @@ function My_Pet_Move() {
     //gets the current progress of the animation
     progress = easeOut((timestamp - animationStartTime) / 10000); // 2000 milliseconds for the animation
     if (progress < 1) { //1 indicates the end of an animation, this checks that the pet should still be moving
-      console.log("progress is " + progress);
       const currentTop = initialTop + progress * (top - initialTop);
       const currentLeft = initialLeft + progress * (left - initialLeft);
 
       //updates the position of the pet
       My_Pet.style.top = currentTop + 'px';
       My_Pet.style.left = currentLeft + 'px';
-
-      console.log(My_Pet.style.top, My_Pet.style.left);
 
       //creates a recursion call
       if(!Is_Petting){
