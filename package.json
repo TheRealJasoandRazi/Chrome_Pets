@@ -4,7 +4,7 @@
   "description": "A chrome extensions that allows the user to displays and interact with digital pets",
   "main": "index.test.js",
   "scripts": {
-    "test": "jest /src/index.test.js"
+    "test": "jest /test ."
   },
   "keywords": [],
   "author": "",

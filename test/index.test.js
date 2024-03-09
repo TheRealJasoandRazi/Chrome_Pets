@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 
-const EXTENSION_PATH = ''; //path to source code
+const EXTENSION_PATH = 'src/'; //path to source code
 const EXTENSION_ID = 'ghpfjapaelnglniiiefgahcpdaioilcl';
 
 let browser; //references browser instance
@@ -26,9 +26,11 @@ afterEach(async () => {
 test('popup renders correctly', async () => {
   const page = await browser.newPage();
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
-
+  
+  await page.waitForSelector('h1') //waits for DOM content to load
+  
   const title = await page.$('h1');
-  //arrow function has the first title as the parameter, the textContent as the code and the second title as the argument
-  const titleText = await page.evaluate(title => title.textContent, title); 
-  expect(titleText.toBe("Chrome Pets"));
+  const titleText = await page.evaluate(title => title.textContent, title);
+  
+  expect(titleText).toBe("Chrome Pets");
 });
