@@ -75,6 +75,7 @@ test('pet is interactable', async () => {
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
   await page.waitForSelector('#Create_Pet_Button');
 
+  await page.click('#Delete_Pet_Button'); //ensure no dups
   await page.click('#Create_Pet_Button');
   const test_page = await browser.newPage();
   await test_page.goto('https://www.google.com/');
@@ -86,7 +87,16 @@ test('pet is interactable', async () => {
   );
   console.log(first_colour);
   
-  await test_page.click('#pet')
+  await test_page.waitForFunction(() => { //waits for the pet to move 100px into the screen so it becomes clickable
+    const petElement = document.querySelector('#pet');
+    if (petElement) {
+      const { left } = petElement.getBoundingClientRect();
+      return left >= 100;
+    }
+    return false;
+  });
+
+  await pet.click();
 
   const second_colour = await pet.evaluate(el =>
     getComputedStyle(el).getPropertyValue('background-color')
