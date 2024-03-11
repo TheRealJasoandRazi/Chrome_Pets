@@ -14,6 +14,7 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
       `--no-sandbox`,
+      '--disable-setuid-sandbox'
     ]
   });
   console.log('Puppeteer launched successfully');
