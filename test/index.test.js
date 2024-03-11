@@ -43,12 +43,12 @@ test('pet is created', async () => {
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
   await page.waitForSelector('#Create_Pet_Button');
 
-  const test_page = await browser.newPage();
-
   await page.click('#Create_Pet_Button');
 
+  const test_page = await browser.newPage();
   await test_page.goto('https://www.google.com/');
-  
+  await page.close();
+    
   const pet = await test_page.waitForSelector('#pet')
   expect(pet).toBeTruthy();
 });
