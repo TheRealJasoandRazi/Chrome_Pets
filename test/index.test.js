@@ -12,7 +12,8 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
     headless: true, //causes browser to be visible when running tests, can be set to new
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
-      `--load-extension=${EXTENSION_PATH}`
+      `--load-extension=${EXTENSION_PATH}`,
+      `--no-sandbox`,
     ]
   });
   console.log('Puppeteer launched successfully');
