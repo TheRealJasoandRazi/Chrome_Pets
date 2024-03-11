@@ -81,5 +81,16 @@ test('pet is interactable', async () => {
   await page.close();
 
   const pet = await test_page.waitForSelector('#pet')
+  const first_colour = await pet.evaluate(el =>
+    getComputedStyle(el).getPropertyValue('background-color')
+  );
+  console.log(first_colour);
+  
   await test_page.click('#pet')
+
+  const second_colour = await pet.evaluate(el =>
+    getComputedStyle(el).getPropertyValue('background-color')
+  );
+  console.log(second_colour);
+  expect(second_colour).not.toBe(first_colour);
 });
