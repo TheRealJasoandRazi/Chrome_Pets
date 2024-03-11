@@ -52,3 +52,34 @@ test('pet is created', async () => {
   const pet = await test_page.waitForSelector('#pet')
   expect(pet).toBeTruthy();
 });
+
+test('pet is deleted', async () => {
+  const page = await browser.newPage();
+  await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
+  await page.waitForSelector('#Create_Pet_Button');
+  await page.waitForSelector('#Delete_Pet_Button');
+
+  await page.click('#Create_Pet_Button');
+  await page.click('#Delete_Pet_Button');
+
+  const test_page = await browser.newPage();
+  await test_page.goto('https://www.google.com/', { waitUntil: 'domcontentloaded' });
+  await page.close();
+  
+  const pet = await test_page.$('#pet')
+  expect(pet).not.toBeTruthy();
+});
+
+test('pet is interactable', async () => {
+  const page = await browser.newPage();
+  await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
+  await page.waitForSelector('#Create_Pet_Button');
+
+  await page.click('#Create_Pet_Button');
+  const test_page = await browser.newPage();
+  await test_page.goto('https://www.google.com/');
+  await page.close();
+
+  const pet = await test_page.waitForSelector('#pet')
+  await test_page.click('#pet')
+});
