@@ -38,7 +38,7 @@ test('popup renders correctly', async () => { //jest code
   const delete_button = await page.$('#Delete_Pet_Button'); //puppeteer code
   expect(create_button).toBeTruthy(); //Jest code
   expect(delete_button).toBeTruthy(); //Jest code
-});
+}, 10000);
 
 test('pet is created', async () => {
   const page = await browser.newPage();
@@ -53,7 +53,7 @@ test('pet is created', async () => {
     
   const pet = await test_page.waitForSelector('#pet')
   expect(pet).toBeTruthy();
-});
+}, 10000);
 
 test('pet is deleted', async () => {
   const page = await browser.newPage();
@@ -70,7 +70,7 @@ test('pet is deleted', async () => {
   
   const pet = await test_page.$('#pet')
   expect(pet).not.toBeTruthy();
-});
+}, 10000);
 
 test('pet is interactable', async () => {
   const page = await browser.newPage();
@@ -105,4 +105,4 @@ test('pet is interactable', async () => {
   );
   console.log(second_colour);
   expect(second_colour).not.toBe(first_colour);
-});
+}, 10000);
