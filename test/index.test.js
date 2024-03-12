@@ -13,7 +13,7 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
-      //`--no-sandbox`,
+      `--no-sandbox`,
       //'--disable-setuid-sandbox'
     ]
   });
