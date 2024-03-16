@@ -30,11 +30,16 @@ function Create_Pet(){ //properties of pet is hardcoded
   My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = "100px";
   My_Pet.style.height = "100px";
-  My_Pet.style.backgroundColor = "Blue";
+  //My_Pet.style.backgroundColor = "Blue";
   My_Pet.style.position = 'fixed';
   My_Pet.style.top = 0;
   My_Pet.style.left = 0;
-  //My_Pet.style.transition = '10s';
+  
+  const pet_image = document.createElement('img');
+  pet_image.src = chrome.runtime.getURL("chrome-extension://ghpfjapaelnglniiiefgahcpdaioilcl/pet_images/duck.png");
+  pet_image.style.width = '100%';
+  pet_image.style.height = '100%';
+  My_Pet.appendChild(pet_image);
 
   document.body.appendChild(My_Pet);
 

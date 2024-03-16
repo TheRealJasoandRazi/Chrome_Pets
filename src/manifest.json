@@ -1,21 +1,28 @@
 {
-    "manifest_version": 3,
-    "name": "Chrome Pets",
-    "description": "A digital duck pet for you!",
-    "version": "1.0",
-    "action": {
-      "default_popup": "Home_PopUp.html"
-    },
-    "background": {
-      "service_worker": "background.js"
-    },
-    "host_permissions": ["*://*/*"],
-    "permissions": [
-      "activeTab",
-      "tabs",
-      "storage",
-      "windows",
-      "webNavigation",
-      "scripting"
-    ]
-  }
+  "manifest_version": 3,
+  "name": "Chrome Pets",
+  "description": "A digital duck pet for you!",
+  "version": "1.0",
+  "action": {
+    "default_popup": "Home_PopUp.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": ["*://*/*"],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "windows",
+    "webNavigation",
+    "scripting"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [ "pet_images/duck.png" ],
+      "matches": [ "<all_urls>" ],
+      "use_dynamic_url": true
+    }
+  ]
+}
