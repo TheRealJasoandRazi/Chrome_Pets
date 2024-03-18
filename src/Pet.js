@@ -27,7 +27,7 @@ function Create_Pet(){ //properties of pet is hardcoded
   My_Pet = document.createElement('div');
   My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
-  My_Pet.innerHTML = "Pet.png";
+  //My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = "100px";
   My_Pet.style.height = "100px";
   //My_Pet.style.backgroundColor = "Blue";
@@ -36,7 +36,7 @@ function Create_Pet(){ //properties of pet is hardcoded
   My_Pet.style.left = 0;
   
   const pet_image = document.createElement('img');
-  pet_image.src = chrome.runtime.getURL("chrome-extension://ghpfjapaelnglniiiefgahcpdaioilcl/pet_images/duck.png");
+  pet_image.src = chrome.runtime.getURL("Asset 1.png");
   pet_image.style.width = '100%';
   pet_image.style.height = '100%';
   My_Pet.appendChild(pet_image);
