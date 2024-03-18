@@ -20,7 +20,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [ "duck.png" ],
+      "resources": [ "Asset_1.png", "Asset_2.png"],
       "matches": [ "<all_urls>" ]
     }
   ]

@@ -1,6 +1,12 @@
 let My_Pet;
 let Is_Petting = false;
 let Animation_Timer;
+let animationStartTime;
+let direction = "";
+let animation_interval;
+
+const frames = ["Asset_2.png", "Asset_1.png"];
+let frame = 0;
 
 //waits for message from background.js
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -36,7 +42,8 @@ function Create_Pet(){ //properties of pet is hardcoded
   My_Pet.style.left = 0;
   
   const pet_image = document.createElement('img');
-  pet_image.src = chrome.runtime.getURL("Asset 1.png");
+  pet_image.setAttribute('id', 'duck_image')
+  pet_image.src = chrome.runtime.getURL("Asset_1.png");
   pet_image.style.width = '100%';
   pet_image.style.height = '100%';
   My_Pet.appendChild(pet_image);
@@ -66,11 +73,13 @@ function Create_Pet(){ //properties of pet is hardcoded
           }
         } else{
           console.log("animation done");
+          stop_pet_animation();
           My_Pet_Move();
         }
     }
     requestAnimationFrame(animate);
   }
+  start_pet_animation();
   startani();
 }
 
@@ -86,14 +95,13 @@ function Get_Direction(){
   return [top, left];
 }
 
-let animationStartTime;
 function My_Pet_Move() {
   let top, left;
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
 
   do { //loops infinitely until it finds a location within the borders of the web browser to move to
-    [top, left, translateX, translateY] = Get_Direction();
+    [top, left] = Get_Direction();
     if (
       top > 0 &&
       top < windowHeight &&
@@ -109,6 +117,13 @@ function My_Pet_Move() {
   const initialTop = parseFloat(My_Pet.style.top) || 0;
   const initialLeft = parseFloat(My_Pet.style.left) || 0;
 
+  console.log(initialLeft);
+  console.log(left);
+  if (left > initialLeft) {
+    direction = "r";
+  } else {
+    direction = "l";
+  }
   //start time of animation
   animationStartTime = performance.now(); //highly precise time in milliseconds
 
@@ -133,14 +148,38 @@ function My_Pet_Move() {
       My_Pet.style.top = top + 'px';
       My_Pet.style.left = left + 'px';
 
+      stop_pet_animation();
       // stop the bet for a hard coded amount of time
       setTimeout(() => {
         My_Pet_Move();
       }, 2000);
     }
   }
-
+  start_pet_animation();
   requestAnimationFrame(animate);
+}
+
+function start_pet_animation() {
+  animation_interval = setInterval(function () {
+    if (frame > frames.length - 1) {
+      frame = 0;
+    }
+    const duck_element_image = document.getElementById("pet").children[0];
+    const duck_image = chrome.runtime.getURL(frames[frame]);
+    if (direction == "l") {
+      duck_element_image.style.transform = "scaleX(-1)";
+    } else {
+      duck_element_image.style.transform = "none";
+    }
+    duck_element_image.src = duck_image;
+    frame++;
+  }, 500);
+}
+
+function stop_pet_animation() {
+  clearInterval(animation_interval);
+  const duck_image = document.getElementById("pet").children[0];
+  duck_image.src = chrome.runtime.getURL(frames[1]);
 }
 
 function Pet() { //the pet action
