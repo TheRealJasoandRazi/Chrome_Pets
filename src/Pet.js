@@ -5,8 +5,8 @@ let animationStartTime;
 let direction = "";
 let animation_interval;
 
-const frames = ["Asset_2.png", "Asset_1.png"];
-let frame = 0;
+const petting_animation_frames = ["pet-petting/petting_1.png", "pet-petting/petting_2.png", "pet-petting/petting_3.png", "pet-petting/petting_4.png", "pet-petting/petting_5.png"]
+const walking_animation_frames = ["pet-walking/walking_2.png", "pet-walking/walking_1.png"];
 
 //waits for message from background.js
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
@@ -70,16 +70,17 @@ function Create_Pet(){ //properties of pet is hardcoded
         if (progress < 1) {
           if(!Is_Petting){
             requestAnimationFrame(animate);
+          } else {
+            stop_pet_animation(walking_animation_frames);
           }
         } else{
-          console.log("animation done");
-          stop_pet_animation();
+          stop_pet_animation(walking_animation_frames);
           My_Pet_Move();
         }
     }
     requestAnimationFrame(animate);
   }
-  start_pet_animation();
+  start_pet_animation(walking_animation_frames);
   startani();
 }
 
@@ -141,6 +142,8 @@ function My_Pet_Move() {
       //creates a recursion call
       if(!Is_Petting){
         requestAnimationFrame(animate); 
+      } else {
+        stop_pet_animation(walking_animation_frames);
       }
 
     } else { //set the final position
@@ -148,24 +151,25 @@ function My_Pet_Move() {
       My_Pet.style.top = top + 'px';
       My_Pet.style.left = left + 'px';
 
-      stop_pet_animation();
+      stop_pet_animation(walking_animation_frames);
       // stop the bet for a hard coded amount of time
       setTimeout(() => {
         My_Pet_Move();
       }, 2000);
     }
   }
-  start_pet_animation();
+  start_pet_animation(walking_animation_frames);
   requestAnimationFrame(animate);
 }
 
-function start_pet_animation() {
+function start_pet_animation(animation_frames) {
+  let frame = 0;
   animation_interval = setInterval(function () {
-    if (frame > frames.length - 1) {
+    if (frame > animation_frames.length - 1) {
       frame = 0;
     }
     const duck_element_image = document.getElementById("pet").children[0];
-    const duck_image = chrome.runtime.getURL(frames[frame]);
+    const duck_image = chrome.runtime.getURL(animation_frames[frame]);
     if (direction == "l") {
       duck_element_image.style.transform = "scaleX(-1)";
     } else {
@@ -176,19 +180,23 @@ function start_pet_animation() {
   }, 500);
 }
 
-function stop_pet_animation() {
+function stop_pet_animation(animation_frames) {
   clearInterval(animation_interval);
   const duck_image = document.getElementById("pet").children[0];
-  duck_image.src = chrome.runtime.getURL(frames[1]);
+  const last_index = animation_frames.length - 1;
+  duck_image.src = chrome.runtime.getURL(animation_frames[last_index]);
 }
 
 function Pet() { //the pet action
   Is_Petting = true; //stops the pet from moving
+  const timeout = petting_animation_frames.length * 500;
   setTimeout(() => {
-    Is_Petting = false;
-    My_Pet_Move(); //starts the pet moving again
-  }, 1000);
-  let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-  My_Pet.style.backgroundColor = randomColor;
+    start_pet_animation(petting_animation_frames);
+    setTimeout(() => {
+      stop_pet_animation(petting_animation_frames);
+      Is_Petting = false;
+      My_Pet_Move(); //starts the pet moving again
+    }, timeout);
+  }, 100);
 }
 

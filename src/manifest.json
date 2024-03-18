@@ -20,7 +20,15 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [ "Asset_1.png", "Asset_2.png"],
+      "resources": [ "pet-walking/walking_1.png", "pet-walking/walking_2.png"],
+      "matches": [ "<all_urls>" ]
+    },
+    {
+      "resources": [ "pet-petting/petting_1.png", 
+      "pet-petting/petting_2.png", 
+      "pet-petting/petting_3.png", 
+      "pet-petting/petting_4.png", 
+      "pet-petting/petting_5.png"],
       "matches": [ "<all_urls>" ]
     }
   ]
