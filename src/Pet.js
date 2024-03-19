@@ -43,7 +43,7 @@ function Create_Pet(){ //properties of pet is hardcoded
   
   const pet_image = document.createElement('img');
   pet_image.setAttribute('id', 'duck_image')
-  pet_image.src = chrome.runtime.getURL("Asset_1.png");
+  pet_image.src = chrome.runtime.getURL("pet-walking/walking_1.png");
   pet_image.style.width = '100%';
   pet_image.style.height = '100%';
   My_Pet.appendChild(pet_image);
@@ -118,8 +118,6 @@ function My_Pet_Move() {
   const initialTop = parseFloat(My_Pet.style.top) || 0;
   const initialLeft = parseFloat(My_Pet.style.left) || 0;
 
-  console.log(initialLeft);
-  console.log(left);
   if (left > initialLeft) {
     direction = "r";
   } else {
@@ -197,6 +195,6 @@ function Pet() { //the pet action
       Is_Petting = false;
       My_Pet_Move(); //starts the pet moving again
     }, timeout);
-  }, 100);
+  }, 50);
 }
 

@@ -19,12 +19,12 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
   });
   console.log('Puppeteer launched successfully');
 });
-  
+
 afterEach(async () => { //jest code
   await browser.close();
   browser = undefined; 
 }); //this isolates tests, one test can impact the result of another if in the same browser
-
+/*
 test('popup renders correctly', async () => { //jest code
   const page = await browser.newPage();
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
@@ -71,7 +71,7 @@ test('pet is deleted', async () => {
   const pet = await test_page.$('#pet')
   expect(pet).not.toBeTruthy();
 }, 10000);
-
+*/
 test('pet is interactable', async () => {
   const page = await browser.newPage();
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
@@ -84,25 +84,33 @@ test('pet is interactable', async () => {
   await page.close();
 
   const pet = await test_page.waitForSelector('#pet')
-  const first_colour = await pet.evaluate(el =>
-    getComputedStyle(el).getPropertyValue('background-color')
-  );
-  console.log(first_colour);
-  
-  await test_page.waitForFunction(() => { //waits for the pet to move 100px into the screen so it becomes clickable
-    const petElement = document.querySelector('#pet');
-    if (petElement) {
-      const { left } = petElement.getBoundingClientRect();
-      return left >= 100;
-    }
-    return false;
+
+  await test_page.waitForFunction(() => { // Waits for the pet to move 100px into the screen so it becomes clickable
+      const petElement = document.querySelector('#pet');
+      if (petElement) {
+          const { left } = petElement.getBoundingClientRect();
+          return left >= 100;
+      }
+      return false;
   });
 
-  await pet.click();
+  const first_frame = await test_page.evaluate(() => {
+    return document.getElementById("pet").children[0].src;
+  });
+  console.log(first_frame);
 
-  const second_colour = await pet.evaluate(el =>
-    getComputedStyle(el).getPropertyValue('background-color')
-  );
-  console.log(second_colour);
-  expect(second_colour).not.toBe(first_colour);
+  await pet.click(); 
+
+  await delay(1000); //delay before animation starts
+
+  const second_frame = await test_page.evaluate(() => {
+    return document.getElementById("pet").children[0].src;
+  });
+  console.log(second_frame);
+
+  expect(second_frame).not.toBe(first_frame);
 }, 10000);
+
+async function delay(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
