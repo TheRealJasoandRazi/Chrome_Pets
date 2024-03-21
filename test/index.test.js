@@ -16,7 +16,9 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
       `--no-sandbox`,
       '--disable-setuid-sandbox',
       '--disable-web-security',
-      '--allow-running-insecure-content'
+      '--allow-running-insecure-content',
+      '--disable-features=IsolateOrigins',
+      '--disable-popup-blocking'
     ]
   });
   console.log('Puppeteer launched successfully');
