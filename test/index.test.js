@@ -11,7 +11,7 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
   browser = await puppeteer.launch({
     headless: true, //causes browser to be visible when running tests, can be set to new
     args: [
-      `--disable-extensions-except=${EXTENSION_PATH}`,
+      //`--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
       `--no-sandbox`,
       '--disable-setuid-sandbox'
@@ -24,7 +24,7 @@ afterEach(async () => { //jest code
   await browser.close();
   browser = undefined; 
 }); //this isolates tests, one test can impact the result of another if in the same browser
-/*
+
 test('popup renders correctly', async () => { //jest code
   const page = await browser.newPage();
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
@@ -71,7 +71,7 @@ test('pet is deleted', async () => {
   const pet = await test_page.$('#pet')
   expect(pet).not.toBeTruthy();
 }, 10000);
-*/
+
 test('pet is interactable', async () => {
   const page = await browser.newPage();
   await page.goto(`chrome-extension://${EXTENSION_ID}/Home_PopUp.html`);
