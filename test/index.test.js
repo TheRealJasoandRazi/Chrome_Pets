@@ -11,10 +11,12 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
   browser = await puppeteer.launch({
     headless: true, //causes browser to be visible when running tests, can be set to new
     args: [
-      //`--disable-extensions-except=${EXTENSION_PATH}`,
+      `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
       `--no-sandbox`,
-      '--disable-setuid-sandbox'
+      '--disable-setuid-sandbox',
+      '--disable-web-security',
+      '--allow-running-insecure-content'
     ]
   });
   console.log('Puppeteer launched successfully');
