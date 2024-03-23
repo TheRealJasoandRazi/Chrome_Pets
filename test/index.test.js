@@ -15,10 +15,10 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
       `--load-extension=${EXTENSION_PATH}`,
       `--no-sandbox`,
       '--disable-setuid-sandbox',
-      '--disable-web-security',
+      /*'--disable-web-security',
       '--allow-running-insecure-content',
       '--disable-features=IsolateOrigins',
-      '--disable-popup-blocking'
+      '--disable-popup-blocking'*/
     ]
   });
   console.log('Puppeteer launched successfully');
