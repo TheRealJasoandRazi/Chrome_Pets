@@ -9,7 +9,8 @@ beforeEach(async () => { //jest code helps structure the tests with puppeteer
   console.log(`Launching Puppeteer with extension from: ${EXTENSION_PATH}`);
 
   browser = await puppeteer.launch({
-    headless: true, //causes browser to be visible when running tests, can be set to new
+    //headless: true, //causes browser to be visible when running tests, can be set to new
+    executablePath: '/usr/bin/google-chrome',
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
