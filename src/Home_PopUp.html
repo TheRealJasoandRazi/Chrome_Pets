@@ -3,12 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Chrome Pets UI</title>
+    <style>
+      body {
+          text-align: center;
+      }
+      .image-container {
+          width: 100px;
+          height: 100px;
+          margin: 0 auto;
+          margin-bottom: 20px;
+      }
+      .image-container img {
+          display: block;
+          margin: 0 auto;
+          max-width: 100%;
+          max-height: 100%;
+      }
+      input, button {
+          margin: 5px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Chrome Pets</h1>
-    <button id="Create_Pet_Button">Create Pet</button>
-    <button id="Delete_Pet_Button">Delete Pet</button>
+    <div class="container">
+      <h1>Chrome Pets</h1>
+      <div class="image-container">
+        <img src="pet-walking/walking_1.png">
+      </div>
+      <input id="size-input" name="size-input" type="number" placeholder="type in a size" value=""/>
+      <button id="Create_Pet_Button">Create Pet</button>
+      <button id="Delete_Pet_Button">Delete Pet</button>
+      <button>New Pet</button>
+    </div>
     <script src="Home_PopUp.js"></script>
   </body>
 </html>

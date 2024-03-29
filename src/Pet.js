@@ -12,7 +12,8 @@ const walking_animation_frames = ["pet-walking/walking_2.png", "pet-walking/walk
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
     console.log("Creating pet");
-    Create_Pet();
+    console.log(message.size);
+    Create_Pet(100);
   } else  if (message.message === "Delete_Pet") {
     console.log("Deleting pet");
     if (My_Pet) {
@@ -29,13 +30,13 @@ function easeOut(t) {
 } //whenn the input value t is low, it increases it and vice versa
 //this helps create an ease out transition effect
 
-function Create_Pet(){ //properties of pet is hardcoded
+function Create_Pet(size){ //properties of pet is hardcoded
   My_Pet = document.createElement('div');
   My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
   //My_Pet.innerHTML = "Pet.png";
-  My_Pet.style.width = "100px";
-  My_Pet.style.height = "100px";
+  My_Pet.style.width = `${size}px`;
+  My_Pet.style.height = `${size}px`;
   //My_Pet.style.backgroundColor = "Blue";
   My_Pet.style.position = 'fixed';
   My_Pet.style.top = 0;
