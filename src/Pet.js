@@ -5,19 +5,26 @@ let animationStartTime;
 let direction = "";
 let animation_interval;
 
-const petting_animation_frames = ["pet-petting/petting_1.png", "pet-petting/petting_2.png", "pet-petting/petting_3.png", "pet-petting/petting_4.png", "pet-petting/petting_5.png"]
-const walking_animation_frames = ["pet-walking/walking_2.png", "pet-walking/walking_1.png"];
+let walking_animation_frames;
+let petting_animation_frames;
 
 //waits for message from background.js
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.message === "New_Pet") {
+    walking_animation_frames = message.pet_walking_frames;
+    petting_animation_frames = message.pet_petting_frames;
     console.log("Creating pet");
-    console.log(message.size);
+    console.log(message.size); //returns undefined for now
+    console.log(message);
+    console.log(walking_animation_frames);
+    console.log(petting_animation_frames);
     Create_Pet(100);
   } else  if (message.message === "Delete_Pet") {
     console.log("Deleting pet");
     if (My_Pet) {
         My_Pet.remove();
+        stop_pet_animation(walking_animation_frames);
+        stop_pet_animation(petting_animation_frames);
         sendResponse({ success: true }); //for the callback function in bg.js
     } else {
         sendResponse({ success: false }); 
@@ -34,17 +41,15 @@ function Create_Pet(size){ //properties of pet is hardcoded
   My_Pet = document.createElement('div');
   My_Pet.setAttribute('id', 'pet');
   My_Pet.style.zIndex = '9999';
-  //My_Pet.innerHTML = "Pet.png";
   My_Pet.style.width = `${size}px`;
   My_Pet.style.height = `${size}px`;
-  //My_Pet.style.backgroundColor = "Blue";
   My_Pet.style.position = 'fixed';
   My_Pet.style.top = 0;
   My_Pet.style.left = 0;
   
   const pet_image = document.createElement('img');
   pet_image.setAttribute('id', 'duck_image')
-  pet_image.src = chrome.runtime.getURL("pet-walking/walking_1.png");
+  pet_image.src = chrome.runtime.getURL(walking_animation_frames[0]);
   pet_image.style.width = '100%';
   pet_image.style.height = '100%';
   My_Pet.appendChild(pet_image);
@@ -52,7 +57,6 @@ function Create_Pet(size){ //properties of pet is hardcoded
   document.body.appendChild(My_Pet);
 
   My_Pet.addEventListener("click", Pet);
-
 
   function startani(){ //one time animation that runs when the pet is intiially created
     let startTime;
@@ -138,8 +142,10 @@ function My_Pet_Move() {
       My_Pet.style.top = currentTop + 'px';
       My_Pet.style.left = currentLeft + 'px';
 
-      //creates a recursion call
-      if(!Is_Petting){
+      if(!My_Pet){ //stops moving pet if it doesn't exist
+        return;
+      }
+      if(!Is_Petting){ //creates a recursion call
         requestAnimationFrame(animate); 
       } else {
         stop_pet_animation(walking_animation_frames);
@@ -169,6 +175,8 @@ function start_pet_animation(animation_frames) {
     }
     const duck_element_image = document.getElementById("pet").children[0];
     const duck_image = chrome.runtime.getURL(animation_frames[frame]);
+    console.log("frame");
+    console.log(animation_frames[frame]);
     if (direction == "l") {
       duck_element_image.style.transform = "scaleX(-1)";
     } else {
@@ -182,13 +190,14 @@ function start_pet_animation(animation_frames) {
 function stop_pet_animation(animation_frames) {
   clearInterval(animation_interval);
   const duck_image = document.getElementById("pet").children[0];
-  const last_index = animation_frames.length - 1;
-  duck_image.src = chrome.runtime.getURL(animation_frames[last_index]);
+  //const last_index = animation_frames.length - 1;
+  duck_image.src = chrome.runtime.getURL(animation_frames[0]);
 }
 
 function Pet() { //the pet action
   Is_Petting = true; //stops the pet from moving
   const timeout = petting_animation_frames.length * 500;
+  console.log("petting now!"); //debugging
   setTimeout(() => {
     start_pet_animation(petting_animation_frames);
     setTimeout(() => {
