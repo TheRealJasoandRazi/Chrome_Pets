@@ -10,7 +10,7 @@ let petting_animation_frames;
 
 //waits for message from background.js
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.message === "New_Pet") {
+  if (message.message === "Create_Pet") {
     walking_animation_frames = message.pet_walking_frames;
     petting_animation_frames = message.pet_petting_frames;
     console.log("Creating pet");
@@ -149,6 +149,7 @@ function My_Pet_Move() {
         requestAnimationFrame(animate); 
       } else {
         stop_pet_animation(walking_animation_frames);
+        return; //if a petting animation started, the pet will stop moving
       }
 
     } else { //set the final position
@@ -170,13 +171,12 @@ function My_Pet_Move() {
 function start_pet_animation(animation_frames) {
   let frame = 0;
   animation_interval = setInterval(function () {
+    if(!My_Pet){return;} //stops animation if pet is deleted during animation
     if (frame > animation_frames.length - 1) {
       frame = 0;
     }
     const duck_element_image = document.getElementById("pet").children[0];
     const duck_image = chrome.runtime.getURL(animation_frames[frame]);
-    console.log("frame");
-    console.log(animation_frames[frame]);
     if (direction == "l") {
       duck_element_image.style.transform = "scaleX(-1)";
     } else {
@@ -190,14 +190,12 @@ function start_pet_animation(animation_frames) {
 function stop_pet_animation(animation_frames) {
   clearInterval(animation_interval);
   const duck_image = document.getElementById("pet").children[0];
-  //const last_index = animation_frames.length - 1;
   duck_image.src = chrome.runtime.getURL(animation_frames[0]);
 }
 
 function Pet() { //the pet action
   Is_Petting = true; //stops the pet from moving
   const timeout = petting_animation_frames.length * 500;
-  console.log("petting now!"); //debugging
   setTimeout(() => {
     start_pet_animation(petting_animation_frames);
     setTimeout(() => {
@@ -205,6 +203,6 @@ function Pet() { //the pet action
       Is_Petting = false;
       My_Pet_Move(); //starts the pet moving again
     }, timeout);
-  }, 50);
+  }, 100); //delays minimises the chances of moving animation to overlap with petting animation
 }
 
